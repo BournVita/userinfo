@@ -26,11 +26,11 @@
 </div>
 </div>
 
-${message} <br>
+<%-- ${message} <br> --%>
 
-${user} <br>
+<%-- ${user} <br> --%>
 
-${timestamp}
+<%-- ${timestamp} --%>
 
 <table class="table" id="location">
   <thead>
