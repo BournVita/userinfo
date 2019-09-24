@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -54,11 +55,11 @@ public class MainController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		Map<String, UserSummary>  models;
 		String pathInfo = request.getPathInfo();
 
 		if (pathInfo == null || pathInfo.equals("/")) {
 
-			Collection<UserSummary> models;
 			try {
 				models = service.getAllSummary();
 				sendAsJson(response, models);
@@ -81,13 +82,13 @@ public class MainController extends HttpServlet {
 
 		String modelId = splits[1];
 
-		if (!_modelsDb.containsKey(modelId)) {
-
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-			return;
-		}
-
-		sendAsJson(response, _modelsDb.get(modelId));
+		/*
+		 * if (!models.containsKey(modelId)) {
+		 * 
+		 * response.sendError(HttpServletResponse.SC_NOT_FOUND); return; }
+		 * 
+		 * sendAsJson(response, _modelsDb.get(modelId));
+		 */
 		return;
 	}
 
@@ -95,16 +96,6 @@ public class MainController extends HttpServlet {
 	// POST/summary/
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		String create_usr = System.getProperty("user.name");
-		LocalDateTime ldt = LocalDateTime.now();		
-		String usrmessage = request.getParameter("message");
-		/*
-		 * request.setAttribute("message", usrmessage); request.setAttribute("user",
-		 * create_usr); request.setAttribute("timestamp", ldt);
-		 * request.getRequestDispatcher("/WEB-INF/pages/front.jsp").forward(request,
-		 * response);
-		 */
 
 		String pathInfo = request.getPathInfo();
 		_gson = new Gson();

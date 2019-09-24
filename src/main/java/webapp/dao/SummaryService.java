@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import webapp.model.UserSummary;
 
@@ -16,11 +18,14 @@ public class SummaryService {
 	public SummaryService() {
 	}
 
-	public List<UserSummary> getAllSummary() throws Exception {
+	public Map<String, UserSummary> getAllSummary() throws Exception {
 		DatabaseConnection db;
 		db = DatabaseConnection.getInstance();
 		List<UserSummary> users = new ArrayList<UserSummary>();
 		Connection connection = db.getConnection();
+		
+		Map<String, UserSummary> summary = new LinkedHashMap<String, UserSummary>();
+		
 		String selectSql = "select * from dbo.usrsummary";
 
 		try (Statement statement = connection.createStatement();
@@ -36,11 +41,11 @@ public class SummaryService {
 				if(resultSet.getDate("UPDATE_DATE")!=null) {
 				ud.setUpdate_date(convertToString(resultSet.getDate("UPDATE_DATE")));
 				}
-				users.add(ud);
+				summary.put(resultSet.getString("USR_COMMENT"), ud);
 			}
 			connection.close();
 		}
-		return users;
+		return summary;
 
 	}
 

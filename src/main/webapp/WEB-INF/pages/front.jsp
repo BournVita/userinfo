@@ -49,8 +49,10 @@
 $(document).ready(function(){
     getAllSummary();
 
-$("#search").click(function() {
-    var roll_no= $('#message').val();
+    $("#search").click(function(e) {
+        e.preventDefault();
+        getAllSummary();
+   		addSummary(); 
 
 });
 function getAllSummary(){
@@ -83,6 +85,39 @@ $('#location').append(trHTML);
 
                 });
 }
+
+
+ function addSummary(){
+    var message= $('#message').val();
+     var username = 'test';
+     var sendInfo = {
+         user_id: '',
+         usr_comment: message,
+         create_date:moment().format('MMM DD, YYYY'),
+         update_date:moment().format('MMM DD, YYYY')
+     };
+console.log(moment().format('MMM DD, YYYY'));
+
+   $.ajax({
+         type: "POST",
+         url: "summary",
+         dataType: "json",
+         data:JSON.stringify(sendInfo),
+         success: function (msg) {
+             if (msg) {
+               $('#status').text('Data is added succesfully')
+                 console.log("Somebody" + name + " was added in list !");
+           } else {
+                 console.log("Cannot add to list !");
+             }
+         },
+                    complete: function (msg) {
+                      getAllSummary();
+                    }
+
+
+     }); 
+} 
 
 });
 </script>
