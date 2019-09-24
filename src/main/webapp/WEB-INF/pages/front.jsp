@@ -72,9 +72,8 @@ $(document).ready(function(){
         var longitude= $('#longitude').val();
         var temperature= $('#temperature').val();
 
-         var username = 'test';
-         var sendInfo = {
-             user_id: '',
+        
+         var sendInfo = {             
              usr_comment: message,
              city_name: city_name,
                         city_alti: latitude,
@@ -103,10 +102,8 @@ $(document).ready(function(){
   } 
     
     function addSummary(){
-        var message= $('#message').val();
-         var username = 'test';
-         var sendInfo = {
-             user_id: '',
+        var message= $('#message').val();         
+         var sendInfo = {             
              usr_comment: message,
              create_date:moment().format('MMM DD, YYYY'),
              update_date:moment().format('MMM DD, YYYY')
