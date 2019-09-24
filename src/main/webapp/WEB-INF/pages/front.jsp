@@ -3,6 +3,8 @@
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+
 <title>Hello world !!!!!</title>
 </head>
 <body>
@@ -14,7 +16,7 @@
 <div style="margin: auto;width:30%;padding-top:50px">
 <form id="form1" name="form1" method="post">
 <div class="form-group">
-<input type="text" class="form-control" id="message">
+Message <input type="text" class="form-control" placeholder= 'Enter Comment' id="message">
 
 <p align="center"><button type="submit" id="search">Done</button></p><br>
 
@@ -50,7 +52,7 @@ $(document).ready(function(){
     getAllSummary();
 
     $("#search").click(function(e) {
-        e.preventDefault();
+        e.preventDefault();        
         getAllSummary();
    		addSummary(); 
 
@@ -112,6 +114,7 @@ console.log(moment().format('MMM DD, YYYY'));
              }
          },
                     complete: function (msg) {
+                    	$("#location").empty();
                       getAllSummary();
                     }
 

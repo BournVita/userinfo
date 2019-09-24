@@ -22,6 +22,7 @@ import webapp.dao.SummaryService;
 import webapp.model.UserSummary;
 
 @WebServlet("/summary/*")
+
 public class MainController extends HttpServlet {
 	/**
 	 * 
