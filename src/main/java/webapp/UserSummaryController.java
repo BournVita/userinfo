@@ -1,8 +1,9 @@
 package webapp;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
+import java.util.Collection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,10 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import webapp.dao.UserService;
-import webapp.model.UserDetails;
+import webapp.model.UserSummary;
 
-@WebServlet("/users/*")
-public class MainController extends HttpServlet {
+@WebServlet("/summary/*")
+public class UserSummaryController extends HttpServlet {
 	/**
 	 * 
 	 */
@@ -47,14 +48,14 @@ public class MainController extends HttpServlet {
 	// GET/summary/id
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		Map<String, UserDetails>  models;
+		Collection<UserSummary> models;
+
 		String pathInfo = request.getPathInfo();
 
 		if (pathInfo == null || pathInfo.equals("/")) {
 
 			try {
-				models = service.getAll();
+				models = service.getAllSummary();
 				sendAsJson(response, models);
 				return;
 			} catch (Exception e) {
@@ -85,5 +86,42 @@ public class MainController extends HttpServlet {
 		return;
 	}
 
-	
+	// Adds new model in DB
+	// POST/summary/
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String pathInfo = request.getPathInfo();
+		_gson = new Gson();
+
+		if (pathInfo == null || pathInfo.equals("/")) {
+
+			StringBuilder buffer = new StringBuilder();
+			BufferedReader reader = request.getReader();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				buffer.append(line);
+			}
+
+			String payload = buffer.toString();
+			System.out.println("payload" + payload);
+
+			UserSummary model=new UserSummary();
+			try {
+				 model = _gson.fromJson(payload, UserSummary.class);
+
+				service.addSummary(model);
+				sendAsJson(response, model);
+				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				return;
+			}
+
+		} else {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+	}
 }

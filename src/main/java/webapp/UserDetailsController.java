@@ -1,8 +1,9 @@
 package webapp;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
+import java.util.Collection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,9 +15,10 @@ import com.google.gson.Gson;
 
 import webapp.dao.UserService;
 import webapp.model.UserDetails;
+import webapp.model.UserSummary;
 
-@WebServlet("/users/*")
-public class MainController extends HttpServlet {
+@WebServlet("/details/*")
+public class UserDetailsController extends HttpServlet {
 	/**
 	 * 
 	 */
@@ -43,18 +45,18 @@ public class MainController extends HttpServlet {
 	}
 
 	// Get models
-	// GET/summary/
-	// GET/summary/id
+	// GET/details/
+	// GET/details/id
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		Map<String, UserDetails>  models;
+
 		String pathInfo = request.getPathInfo();
 
 		if (pathInfo == null || pathInfo.equals("/")) {
 
+			Collection<UserDetails> models;
 			try {
-				models = service.getAll();
+				models = service.getAllDetails();
 				sendAsJson(response, models);
 				return;
 			} catch (Exception e) {
@@ -74,9 +76,8 @@ public class MainController extends HttpServlet {
 		}
 
 		String modelId = splits[1];
-
 		/*
-		 * if (!models.containsKey(modelId)) {
+		 * if (!_modelsDb.containsKey(modelId)) {
 		 * 
 		 * response.sendError(HttpServletResponse.SC_NOT_FOUND); return; }
 		 * 
@@ -85,5 +86,42 @@ public class MainController extends HttpServlet {
 		return;
 	}
 
-	
+	// Adds new model in DB
+	// POST/summary/
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String pathInfo = request.getPathInfo();
+		_gson = new Gson();
+
+		if (pathInfo == null || pathInfo.equals("/")) {
+
+			StringBuilder buffer = new StringBuilder();
+			BufferedReader reader = request.getReader();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				buffer.append(line);
+			}
+
+			String payload = buffer.toString();
+			System.out.println("payload" + payload);
+
+			UserDetails model=new UserDetails();
+			try {
+				 model = _gson.fromJson(payload, UserDetails.class);
+
+				service.addDetails(model);
+				sendAsJson(response, model);
+				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				return;
+			}
+
+		} else {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+	}
 }
