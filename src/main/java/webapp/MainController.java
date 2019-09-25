@@ -22,8 +22,30 @@ public class MainController extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Gson _gson = null;
+	private UserService service = null;
 
-	UserService service = new UserService();
+	public Gson get_gson() {
+		return _gson;
+	}
+
+	public void set_gson(Gson _gson) {
+		this._gson = _gson;
+	}
+
+	public UserService getService() {
+		return service;
+	}
+
+	public MainController() {
+		service = new UserService();
+		setService(service);
+	}
+
+	public void setService(UserService service) {
+		this.service = service;
+		this._gson = new Gson();
+	}
+
 
 	// a utility method to send object
 	// as JSON response
@@ -31,8 +53,6 @@ public class MainController extends HttpServlet {
 
 		System.out.println("Object to json" + obj);
 		response.setContentType("application/json");
-		_gson = new Gson();
-
 
 		String res = _gson.toJson(obj);
 
@@ -47,9 +67,10 @@ public class MainController extends HttpServlet {
 	// GET/summary/id
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		Map<String, UserDetails>  models;
+
+		Map<String, UserDetails> models;
 		String pathInfo = request.getPathInfo();
+		System.out.println("Object to pathInfo" + pathInfo);
 
 		if (pathInfo == null || pathInfo.equals("/")) {
 
@@ -64,26 +85,7 @@ public class MainController extends HttpServlet {
 			}
 
 		}
-
-		String[] splits = pathInfo.split("/");
-
-		if (splits.length != 2) {
-
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-			return;
-		}
-
-		String modelId = splits[1];
-
-		/*
-		 * if (!models.containsKey(modelId)) {
-		 * 
-		 * response.sendError(HttpServletResponse.SC_NOT_FOUND); return; }
-		 * 
-		 * sendAsJson(response, _modelsDb.get(modelId));
-		 */
 		return;
 	}
 
-	
 }
