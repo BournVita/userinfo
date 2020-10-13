@@ -60,7 +60,7 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<junit.version>4.12</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<junit.jupiter.version>5.0.0-M4</junit.jupiter.version>
 		<junit.vintage.version>${junit.version}.0-M4</junit.vintage.version>
 		<junit.platform.version>1.0.0-M4</junit.platform.version>
